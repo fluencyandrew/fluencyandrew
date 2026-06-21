@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking Confirmed | Andrew Pritchard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --bg: #071126;
+  --bg2: #0a1628;
+  --cyan: #00e5ff;
+  --cyan-dim: rgba(0,229,255,0.12);
+  --cyan-border: rgba(0,229,255,0.22);
+  --green: #00ff88;
+  --green-dim: rgba(0,255,136,0.1);
+  --green-border: rgba(0,255,136,0.25);
+  --purple: #7b61ff;
+  --white: #f0f4ff;
+  --mid: rgba(240,244,255,0.75);
+  --dim: rgba(240,244,255,0.4);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Inter',sans-serif;
+  background:var(--bg); color:var(--white); line-height:1.7;
+  overflow-x:hidden; min-height:100vh;
+}
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,255,0.01) 2px,rgba(0,229,255,0.01) 4px);
+}
+.grid-bg {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.glow {
+  position:fixed; top:-100px; left:50%; transform:translateX(-50%);
+  width:800px; height:500px; border-radius:50%;
+  background:radial-gradient(circle,rgba(0,255,136,0.06) 0%,transparent 70%);
+  pointer-events:none; z-index:0;
+}
+
+nav {
+  position:fixed; top:0; width:100%; z-index:100;
+  background:rgba(6,14,31,0.95); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--cyan-border);
+  padding:0 48px; height:64px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.nav-logo { font-family:'Space Mono',monospace; color:var(--cyan); font-size:0.85rem; letter-spacing:0.1em; text-decoration:none; }
+.nav-logo span { color:var(--dim); }
+
+.page { max-width:700px; margin:0 auto; padding:110px 24px 80px; position:relative; z-index:1; }
+
+/* CONFIRMED HEADER */
+.confirmed-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--green-dim); border:1px solid var(--green-border);
+  color:var(--green); font-family:'Space Mono',monospace;
+  font-size:0.68rem; letter-spacing:0.12em; padding:6px 16px;
+  border-radius:20px; text-transform:uppercase; margin-bottom:24px;
+}
+.confirmed-badge::before { content:'●'; font-size:0.5rem; }
+
+h1 { font-size:clamp(2rem,4vw,2.8rem); font-weight:800; letter-spacing:-0.03em; line-height:1.2; margin-bottom:16px; }
+h1 .accent { color:var(--cyan); }
+.lead { font-size:1rem; color:var(--mid); margin-bottom:48px; font-weight:300; line-height:1.8; }
+
+/* CARDS */
+.card {
+  background:rgba(0,0,0,0.35); border:1px solid var(--cyan-border);
+  border-radius:10px; padding:28px 28px; margin-bottom:16px;
+  position:relative; overflow:hidden;
+}
+.card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--purple),var(--cyan)); }
+.card.green-card::before { background:linear-gradient(90deg,var(--green),var(--cyan)); }
+.card-label {
+  font-family:'Space Mono',monospace; font-size:0.62rem;
+  color:var(--cyan); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:12px;
+}
+.card.green-card .card-label { color:var(--green); }
+.card h3 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+.card p { font-size:0.88rem; color:var(--mid); margin-bottom:14px; font-weight:300; }
+.card p:last-child { margin-bottom:0; }
+
+/* BUTTONS */
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Inter',sans-serif; font-weight:600; font-size:0.82rem;
+  letter-spacing:0.04em; padding:11px 22px; border-radius:6px;
+  text-decoration:none; transition:all 0.2s; border:1px solid;
+  cursor:pointer;
+}
+.btn-cyan { background:var(--cyan-dim); color:var(--cyan); border-color:var(--cyan); }
+.btn-cyan:hover { background:rgba(0,229,255,0.22); box-shadow:0 0 16px rgba(0,229,255,0.15); }
+.btn-green { background:var(--green-dim); color:var(--green); border-color:var(--green-border); }
+.btn-green:hover { background:rgba(0,255,136,0.18); }
+.btn-whatsapp { background:rgba(37,211,102,0.12); color:#25d366; border-color:rgba(37,211,102,0.3); }
+.btn-whatsapp:hover { background:rgba(37,211,102,0.22); }
+.btn-linkedin { background:rgba(10,102,194,0.15); color:#0a66c2; border-color:rgba(10,102,194,0.3); }
+.btn-linkedin:hover { background:rgba(10,102,194,0.25); }
+.btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:4px; }
+
+/* MEET GUIDE */
+.meet-steps { list-style:none; margin-top:8px; }
+.meet-steps li {
+  display:flex; gap:14px; align-items:flex-start;
+  padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05);
+  font-size:0.86rem; color:var(--mid);
+}
+.meet-steps li:last-child { border-bottom:none; }
+.meet-step-num {
+  font-family:'Space Mono',monospace; font-size:0.7rem;
+  color:var(--cyan); background:var(--cyan-dim);
+  border:1px solid var(--cyan-border); border-radius:4px;
+  padding:2px 8px; flex-shrink:0; margin-top:2px;
+}
+
+/* CONNECT SECTION */
+.connect-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:4px; }
+.connect-card {
+  background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);
+  border-radius:8px; padding:20px; text-align:center;
+}
+.connect-icon { font-size:1.8rem; margin-bottom:8px; }
+.connect-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:6px; }
+.connect-card p { font-size:0.78rem; color:var(--mid); margin-bottom:14px; font-weight:300; }
+
+/* ICAL */
+.ical-note {
+  background:rgba(123,97,255,0.08); border:1px solid rgba(123,97,255,0.2);
+  border-radius:8px; padding:16px 20px; margin-top:14px;
+  font-size:0.82rem; color:rgba(200,190,255,0.8);
+}
+.ical-note strong { color:#a78bfa; }
+
+footer {
+  text-align:center; padding:32px 24px;
+  font-family:'Space Mono',monospace; font-size:0.62rem; color:var(--dim);
+  position:relative; z-index:1; border-top:1px solid rgba(255,255,255,0.05);
+  margin-top:48px;
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="glow"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">ANDREW<span> // PROFESSIONAL ENGLISH</span></a>
+</nav>
+
+<div class="page">
+
+  <div class="confirmed-badge">Booking Confirmed</div>
+  <h1>You're booked in.<br>See you <span class="accent">on the call.</span></h1>
+  <p class="lead">Your discovery call is confirmed and your deposit has been received. Everything you need for the session is below — including your Meet link, calendar options, and a quick guide to Google Meet if you haven't used it before.</p>
+
+  <!-- CALENDAR LINK -->
+  <div class="card green-card">
+    <div class="card-label">// Your Booking</div>
+    <h3>📅 Add to your calendar</h3>
+    <p>A confirmation email with your Google Meet link and calendar invite has been sent to your inbox. If you don't see it, check your spam folder.</p>
+    <p>If you use Apple Calendar or Outlook, download the .ics file below to add the session directly.</p>
+    <div class="btn-row">
+      <a href="#" class="btn btn-green" id="ical-btn">⬇ Download .ics file</a>
+      <a href="https://calendar.google.com" target="_blank" class="btn btn-cyan">Open Google Calendar</a>
+    </div>
+    <div class="ical-note">
+      <strong>Using Apple Calendar?</strong> Open the .ics file and it will add the event automatically. On iPhone, tap the file in your email or downloads — it opens directly in Calendar.
+    </div>
+  </div>
+
+  <!-- GOOGLE MEET GUIDE -->
+  <div class="card">
+    <div class="card-label">// How to Join</div>
+    <h3>🎥 How to use Google Meet</h3>
+    <p>Never used Google Meet before? Here's all you need to know — it takes about 30 seconds to get set up.</p>
+    <ul class="meet-steps">
+      <li><span class="meet-step-num">01</span>Click the Google Meet link in your confirmation email — or find it in your calendar invite.</li>
+      <li><span class="meet-step-num">02</span>If prompted, sign into a Google account (Gmail). If you don't have one, you can join as a guest.</li>
+      <li><span class="meet-step-num">03</span>Allow access to your camera and microphone when the browser asks — this is required to join.</li>
+      <li><span class="meet-step-num">04</span>Click <strong>Join now</strong>. You'll enter a waiting room — I'll admit you as soon as I'm ready.</li>
+      <li><span class="meet-step-num">05</span>For best quality, use headphones and a stable wifi connection. A laptop or desktop works better than a phone.</li>
+    </ul>
+    <div class="btn-row" style="margin-top:16px;">
+      <a href="https://meet.google.com" target="_blank" class="btn btn-cyan">Open Google Meet</a>
+    </div>
+  </div>
+
+  <!-- CONNECT -->
+  <div class="card">
+    <div class="card-label">// Before the Call</div>
+    <h3>💬 Get in touch</h3>
+    <p>Have a question before the session? Want to share some context? Reach out on WhatsApp or connect with me on LinkedIn — I'd love to know a little more about you before we meet.</p>
+    <div class="connect-grid">
+      <div class="connect-card">
+        <div class="connect-icon">💬</div>
+        <h4>WhatsApp</h4>
+        <p>Message me directly — I'm usually available within a few hours.</p>
+        <a href="https://wa.me/447915835739" target="_blank" class="btn btn-whatsapp" style="width:100%;justify-content:center;">Message on WhatsApp</a>
+      </div>
+      <div class="connect-card">
+        <div class="connect-icon">🔗</div>
+        <h4>LinkedIn</h4>
+        <p>Connect with me — see my background and stay in touch after the call.</p>
+        <a href="https://www.linkedin.com/in/fluencyandrew/" target="_blank" class="btn btn-linkedin" style="width:100%;justify-content:center;">Connect on LinkedIn</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT TO EXPECT -->
+  <div class="card">
+    <div class="card-label">// What to Expect</div>
+    <h3>🎯 What happens on the call</h3>
+    <p>The discovery call is 30 minutes. Here's how I structure it:</p>
+    <ul class="meet-steps">
+      <li><span class="meet-step-num">01</span><strong>Where you are</strong> — we'll quickly establish your current level, context, and the situations where you need to perform.</li>
+      <li><span class="meet-step-num">02</span><strong>Where you want to be</strong> — what does success look like for you in 3, 6, or 12 months?</li>
+      <li><span class="meet-step-num">03</span><strong>Whether the programme fits</strong> — I'll be honest if I think the programme isn't the right fit. No pressure either way.</li>
+      <li><span class="meet-step-num">04</span><strong>Next steps</strong> — if we both want to proceed, we'll agree a start date and I'll send you programme details.</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>© 2026 ANDREW PRITCHARD // ADVANCED PROFESSIONAL ENGLISH // CAMBRIDGE CELTA CERTIFIED</footer>
+
+<script>
+  // Generate a simple .ics file for download
+  // In production this would use real event details from Calendly webhook
+  document.getElementById('ical-btn').addEventListener('click', function(e) {
+    e.preventDefault();
+    const now = new Date();
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Andrew Pritchard//EN',
+      'BEGIN:VEVENT',
+      'DTSTART:' + now.toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z',
+      'DTEND:' + new Date(now.getTime() + 30*60000).toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z',
+      'SUMMARY:Discovery Call — Andrew Pritchard',
+      'DESCRIPTION:English Fluency Discovery Call. Check your confirmation email for the Google Meet link.',
+      'ORGANIZER:mailto:fluencyandrew@gmail.com',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([ics], { type: 'text/calendar' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'discovery-call-andrew-pritchard.ics';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+</script>
+</body>
+</html>
