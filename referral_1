@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partner Programme | Andrew Pritchard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --bg: #071126;
+  --bg2: #0a1628;
+  --cyan: #00e5ff;
+  --cyan-dim: rgba(0,229,255,0.12);
+  --cyan-border: rgba(0,229,255,0.22);
+  --green: #00ff88;
+  --green-dim: rgba(0,255,136,0.1);
+  --green-border: rgba(0,255,136,0.25);
+  --purple: #7b61ff;
+  --white: #f0f4ff;
+  --mid: rgba(240,244,255,0.75);
+  --dim: rgba(240,244,255,0.4);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Inter',sans-serif;
+  background:var(--bg); color:var(--white); line-height:1.7;
+  overflow-x:hidden;
+}
+body::before {
+  content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,255,0.01) 2px,rgba(0,229,255,0.01) 4px);
+}
+.grid-bg {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.glow {
+  position:fixed; top:-100px; right:-100px;
+  width:700px; height:700px; border-radius:50%;
+  background:radial-gradient(circle,rgba(0,229,255,0.06) 0%,transparent 70%);
+  pointer-events:none; z-index:0;
+}
+.glow2 {
+  position:fixed; bottom:-100px; left:-100px;
+  width:500px; height:500px; border-radius:50%;
+  background:radial-gradient(circle,rgba(123,97,255,0.06) 0%,transparent 70%);
+  pointer-events:none; z-index:0;
+}
+
+/* NAV */
+nav {
+  position:fixed; top:0; width:100%; z-index:100;
+  background:rgba(6,14,31,0.95); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--cyan-border);
+  padding:0 48px; height:64px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.nav-logo { font-family:'Space Mono',monospace; color:var(--cyan); font-size:0.85rem; letter-spacing:0.1em; text-decoration:none; }
+.nav-logo span { color:var(--dim); }
+.nav-back { font-family:'Space Mono',monospace; font-size:0.72rem; color:var(--dim); letter-spacing:0.08em; text-decoration:none; text-transform:uppercase; transition:color 0.2s; }
+.nav-back:hover { color:var(--cyan); }
+
+/* HERO */
+.hero {
+  padding:130px 48px 88px; position:relative; z-index:1;
+  max-width:960px; margin:0 auto;
+}
+.hero-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--green-dim); border:1px solid var(--green-border);
+  color:var(--green); font-family:'Space Mono',monospace;
+  font-size:0.68rem; letter-spacing:0.12em; padding:6px 16px;
+  border-radius:20px; text-transform:uppercase; margin-bottom:28px;
+}
+.hero-tag::before { content:'●'; font-size:0.5rem; }
+h1 { font-size:clamp(2.2rem,4.5vw,3.6rem); font-weight:800; letter-spacing:-0.03em; line-height:1.15; margin-bottom:20px; }
+h1 .accent { color:var(--cyan); }
+.hero-sub { font-size:1.05rem; color:var(--mid); max-width:580px; margin-bottom:40px; font-weight:300; line-height:1.8; }
+.hero-ctas { display:flex; gap:12px; flex-wrap:wrap; }
+.btn {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Inter',sans-serif; font-weight:600; font-size:0.84rem;
+  letter-spacing:0.03em; padding:13px 24px; border-radius:8px;
+  text-decoration:none; transition:all 0.2s; border:1px solid; cursor:pointer;
+}
+.btn-cyan { background:var(--cyan); color:var(--bg); border-color:var(--cyan); }
+.btn-cyan:hover { background:rgba(0,229,255,0.85); box-shadow:0 8px 24px rgba(0,229,255,0.25); transform:translateY(-1px); }
+.btn-outline { background:transparent; color:var(--cyan); border-color:var(--cyan); }
+.btn-outline:hover { background:var(--cyan-dim); }
+.btn-green { background:var(--green-dim); color:var(--green); border-color:var(--green-border); }
+.btn-green:hover { background:rgba(0,255,136,0.18); }
+
+/* TRUST STRIP */
+.trust-strip {
+  background:rgba(0,0,0,0.3); border-top:1px solid var(--cyan-border); border-bottom:1px solid var(--cyan-border);
+  padding:32px 48px; position:relative; z-index:1;
+}
+.trust-inner { max-width:960px; margin:0 auto; display:flex; gap:40px; align-items:center; flex-wrap:wrap; }
+.trust-item { display:flex; align-items:center; gap:10px; font-size:0.85rem; color:var(--mid); }
+.trust-item .ti-num { font-family:'Space Mono',monospace; font-size:1.2rem; color:var(--cyan); font-weight:700; }
+.trust-divider { width:1px; height:32px; background:var(--cyan-border); flex-shrink:0; }
+
+/* SECTIONS */
+section { padding:88px 48px; position:relative; z-index:1; }
+.section-inner { max-width:960px; margin:0 auto; }
+.sys-tag {
+  font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.18em;
+  color:var(--cyan); text-transform:uppercase; margin-bottom:14px;
+  display:flex; align-items:center; gap:8px;
+}
+.sys-tag::before { content:'//'; color:var(--purple); }
+h2 { font-size:clamp(1.7rem,3vw,2.4rem); font-weight:800; letter-spacing:-0.03em; line-height:1.2; margin-bottom:16px; }
+.section-sub { color:var(--mid); max-width:580px; margin-bottom:48px; font-weight:300; font-size:0.97rem; }
+
+/* CARDS */
+.card {
+  background:rgba(0,0,0,0.35); border:1px solid var(--cyan-border);
+  border-radius:10px; padding:28px; margin-bottom:16px;
+  position:relative; overflow:hidden;
+}
+.card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--purple),var(--cyan)); }
+.card.green-card::before { background:linear-gradient(90deg,var(--green),var(--cyan)); }
+.card-label { font-family:'Space Mono',monospace; font-size:0.62rem; color:var(--cyan); letter-spacing:0.15em; text-transform:uppercase; margin-bottom:10px; }
+.card.green-card .card-label { color:var(--green); }
+.card h3 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+.card p { font-size:0.88rem; color:var(--mid); margin-bottom:0; font-weight:300; line-height:1.7; }
+
+/* WHO IS THIS FOR */
+.who-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px; }
+.who-card {
+  background:rgba(0,0,0,0.3); border:1px solid var(--cyan-border);
+  border-radius:10px; padding:24px 20px;
+  transition:border-color 0.2s, transform 0.2s;
+}
+.who-card:hover { border-color:var(--cyan); transform:translateY(-2px); }
+.who-icon { font-size:1.6rem; margin-bottom:12px; }
+.who-card h4 { font-size:0.92rem; font-weight:700; margin-bottom:6px; }
+.who-card p { font-size:0.8rem; color:var(--mid); font-weight:300; margin:0; }
+
+/* HOW IT WORKS */
+.steps { display:grid; grid-template-columns:repeat(4,1fr); gap:2px; margin-top:8px; }
+.step-card {
+  background:rgba(0,0,0,0.3); border:1px solid var(--cyan-border);
+  padding:28px 22px; position:relative;
+}
+.step-card:first-child { border-radius:10px 0 0 10px; }
+.step-card:last-child { border-radius:0 10px 10px 0; }
+.step-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--cyan),var(--purple)); }
+.step-num { font-family:'Space Mono',monospace; font-size:1.8rem; font-weight:700; color:rgba(0,229,255,0.12); margin-bottom:12px; }
+.step-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:6px; color:var(--white); }
+.step-card p { font-size:0.78rem; color:var(--mid); font-weight:300; margin:0; }
+
+/* COMMISSION TABLE */
+.commission-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:8px; }
+.commission-card {
+  border-radius:10px; padding:32px 28px; position:relative; overflow:hidden;
+}
+.commission-card.passive { background:rgba(0,0,0,0.35); border:1px solid var(--cyan-border); }
+.commission-card.active { background:rgba(0,255,136,0.05); border:1px solid var(--green-border); }
+.commission-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.commission-card.passive::before { background:linear-gradient(90deg,var(--purple),var(--cyan)); }
+.commission-card.active::before { background:linear-gradient(90deg,var(--green),var(--cyan)); }
+.commission-tier { font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:12px; }
+.commission-card.passive .commission-tier { color:var(--cyan); }
+.commission-card.active .commission-tier { color:var(--green); }
+.commission-rate { font-family:'Space Mono',monospace; font-size:3rem; font-weight:700; line-height:1; margin-bottom:4px; }
+.commission-card.passive .commission-rate { color:var(--cyan); }
+.commission-card.active .commission-rate { color:var(--green); }
+.commission-label { font-size:0.8rem; color:var(--dim); margin-bottom:20px; }
+.commission-examples { list-style:none; }
+.commission-examples li {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:9px 0; border-bottom:1px solid rgba(255,255,255,0.05);
+  font-size:0.82rem; color:var(--mid);
+}
+.commission-examples li:last-child { border-bottom:none; }
+.commission-examples li span:last-child { font-family:'Space Mono',monospace; font-weight:700; color:var(--white); }
+.commission-desc { font-size:0.82rem; color:var(--mid); font-weight:300; margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); }
+
+/* PAYMENT TERMS */
+.terms-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:8px; }
+.term-card {
+  background:rgba(0,0,0,0.3); border:1px solid var(--cyan-border);
+  border-radius:10px; padding:22px 20px;
+}
+.term-icon { font-size:1.4rem; margin-bottom:10px; }
+.term-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:6px; }
+.term-card p { font-size:0.78rem; color:var(--mid); font-weight:300; margin:0; }
+
+/* WHAT THEY GET */
+.student-features { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+.student-features li {
+  display:flex; align-items:flex-start; gap:12px;
+  background:rgba(0,0,0,0.3); border:1px solid var(--cyan-border);
+  border-radius:8px; padding:14px 16px;
+  font-size:0.86rem; color:var(--mid);
+  transition:border-color 0.2s;
+}
+.student-features li:hover { border-color:var(--cyan); color:var(--white); }
+.student-features li::before { content:'◆'; color:var(--cyan); font-size:0.4rem; margin-top:7px; flex-shrink:0; }
+
+/* FORM */
+.form-shell {
+  background:rgba(0,0,0,0.4); border:1px solid var(--cyan-border);
+  border-radius:10px; overflow:hidden; margin-top:8px;
+}
+.form-header {
+  background:rgba(0,229,255,0.04); border-bottom:1px solid var(--cyan-border);
+  padding:18px 28px;
+}
+.form-header-title { font-family:'Space Mono',monospace; font-size:0.7rem; color:var(--cyan); letter-spacing:0.1em; }
+.form-body { padding:32px 28px; }
+.field { margin-bottom:18px; }
+.field label { display:block; font-size:0.7rem; color:var(--dim); letter-spacing:0.08em; text-transform:uppercase; font-family:'Space Mono',monospace; margin-bottom:7px; }
+.field input, .field select, .field textarea {
+  width:100%; background:rgba(0,229,255,0.04); border:1px solid var(--cyan-border);
+  border-radius:6px; color:var(--white); font-family:'Inter',sans-serif;
+  font-size:0.9rem; padding:11px 14px; outline:none; transition:border-color 0.2s; appearance:none;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color:var(--cyan); background:rgba(0,229,255,0.07); }
+.field textarea { resize:vertical; min-height:90px; }
+.field select option { background:var(--bg2); color:var(--white); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.form-submit { margin-top:8px; }
+.radio-group { display:flex; flex-direction:column; gap:8px; }
+.radio-opt { display:flex; align-items:flex-start; gap:12px; background:rgba(0,229,255,0.03); border:1px solid var(--cyan-border); border-radius:6px; padding:11px 14px; cursor:pointer; transition:background 0.2s, border-color 0.2s; }
+.radio-opt:hover { background:var(--cyan-dim); border-color:var(--cyan); }
+.radio-opt input[type=radio] { accent-color:var(--cyan); width:16px; height:16px; flex-shrink:0; margin-top:3px; }
+.radio-opt span { font-size:0.86rem; color:var(--mid); }
+.btn-submit { background:var(--cyan); color:var(--bg); border-color:var(--cyan); font-weight:700; font-size:0.88rem; padding:14px 32px; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif; border:none; transition:all 0.2s; }
+.btn-submit:hover { background:rgba(0,229,255,0.85); box-shadow:0 8px 24px rgba(0,229,255,0.25); }
+.btn-submit:disabled { opacity:0.6; cursor:not-allowed; }
+
+.success-msg { display:none; text-align:center; padding:48px 28px; }
+.success-msg.show { display:block; }
+.success-icon { font-size:2.5rem; margin-bottom:16px; }
+.success-msg h3 { font-size:1.1rem; font-weight:700; margin-bottom:8px; }
+.success-msg p { color:var(--mid); font-size:0.88rem; }
+
+/* FAQ */
+.faq-list { margin-top:8px; }
+.faq-item { border-bottom:1px solid rgba(255,255,255,0.06); }
+.faq-q {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:18px 0; cursor:pointer; font-size:0.92rem; font-weight:600;
+  transition:color 0.2s;
+}
+.faq-q:hover { color:var(--cyan); }
+.faq-toggle { font-family:'Space Mono',monospace; color:var(--cyan); font-size:1.2rem; flex-shrink:0; transition:transform 0.2s; }
+.faq-a { display:none; padding-bottom:18px; font-size:0.86rem; color:var(--mid); font-weight:300; line-height:1.7; }
+.faq-item.open .faq-a { display:block; }
+.faq-item.open .faq-toggle { transform:rotate(45deg); }
+
+footer {
+  border-top:1px solid var(--cyan-border);
+  text-align:center; padding:28px 48px;
+  font-family:'Space Mono',monospace; font-size:0.62rem; color:var(--dim);
+  position:relative; z-index:1;
+}
+footer a { color:var(--cyan); text-decoration:none; }
+
+@media(max-width:800px){
+  nav { padding:0 20px; }
+  .hero, section { padding:64px 20px; }
+  .trust-strip { padding:28px 20px; }
+  .trust-divider { display:none; }
+  .who-grid, .steps, .commission-grid, .terms-grid, .student-features, .form-row { grid-template-columns:1fr; }
+  .step-card:first-child, .step-card:last-child { border-radius:10px; }
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="glow"></div>
+<div class="glow2"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">ANDREW<span> // PROFESSIONAL ENGLISH</span></a>
+  <a href="index.html" class="nav-back">← Main Site</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Partner & Referral Programme</div>
+  <h1>Refer clients.<br>Earn <span class="accent">recurring commission.</span></h1>
+  <p class="hero-sub">If you work with high-performing professionals who need to level up their English — executives, founders, engineers, MBA candidates — I'd like to work with you. Simple referral structure, reliable payouts, and a service your clients will thank you for recommending.</p>
+  <div class="hero-ctas">
+    <a href="#apply" class="btn btn-cyan">Apply to Partner →</a>
+    <a href="#commission" class="btn btn-outline">See Commission Rates</a>
+  </div>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust-strip">
+  <div class="trust-inner">
+    <div class="trust-item"><span class="ti-num">15+</span><span>Years teaching advanced professionals</span></div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span class="ti-num">CELTA</span><span>Cambridge certified</span></div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span class="ti-num">B2–C1+</span><span>Advanced learners only</span></div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span class="ti-num">€245</span><span>per month per student</span></div>
+    <div class="trust-divider"></div>
+    <div class="trust-item"><span class="ti-num">10–15%</span><span>referral commission</span></div>
+  </div>
+</div>
+
+<!-- WHO IS THIS FOR -->
+<section>
+  <div class="section-inner">
+    <div class="sys-tag">Ideal Partners</div>
+    <h2>Who partners with me</h2>
+    <p class="section-sub">The best referral partners are professionals who already work with high-performing non-native English speakers — and who want to add genuine value to their client relationships.</p>
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="who-icon">🎯</div>
+        <h4>Executive & Career Coaches</h4>
+        <p>Your clients want to perform at the highest level. Language precision is often the gap between where they are and where they want to be.</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">🎓</div>
+        <h4>MBA & Admissions Consultants</h4>
+        <p>Candidates preparing for top business schools need authoritative, precise English — in interviews, essays, and on campus.</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">🌍</div>
+        <h4>Relocation Consultants</h4>
+        <p>Professionals moving to English-speaking environments often need rapid professional language development to hit the ground running.</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">📊</div>
+        <h4>L&D and HR Managers</h4>
+        <p>Corporate teams with international talent often have high-potential employees held back by language precision — not ability.</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">🏢</div>
+        <h4>Language Schools</h4>
+        <p>Schools that don't offer advanced professional English coaching, or that have overflow students beyond their capacity.</p>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">💼</div>
+        <h4>Outplacement Consultants</h4>
+        <p>Professionals in transition who need to present with authority in interviews and new roles — fast.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="background:var(--bg2);border-top:1px solid var(--cyan-border);border-bottom:1px solid var(--cyan-border);">
+  <div class="section-inner">
+    <div class="sys-tag">Process</div>
+    <h2>How it works</h2>
+    <p class="section-sub">Simple by design. No complicated tracking systems or approval processes.</p>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <h4>You apply</h4>
+        <p>Fill in the short form below. I'll review and get back to you within 48 hours to discuss the partnership.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <h4>You refer</h4>
+        <p>Share your unique referral link or introduce a client directly. They book a discovery call via my site.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <h4>They enrol</h4>
+        <p>If the client signs up to the monthly or full programme, your commission is triggered automatically.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <h4>You get paid</h4>
+        <p>Commission paid monthly via bank transfer or PayPal. Full transparency — you'll receive a statement each month.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMISSION -->
+<section id="commission">
+  <div class="section-inner">
+    <div class="sys-tag">Commission Structure</div>
+    <h2>What you earn</h2>
+    <p class="section-sub">Two tiers based on how actively you refer. Both are paid for the first 3 months of a student's monthly subscription, or as a one-off on the full programme.</p>
+    <div class="commission-grid">
+      <div class="commission-card passive">
+        <div class="commission-tier">// Tier 1 — Passive Referral</div>
+        <div class="commission-rate">10%</div>
+        <div class="commission-label">Link share or casual introduction</div>
+        <ul class="commission-examples">
+          <li><span>Monthly plan (per month × 3)</span><span>€24.50/mo</span></li>
+          <li><span>Full programme (one-off)</span><span>€245</span></li>
+          <li><span>3 students on monthly</span><span>€220.50</span></li>
+          <li><span>3 students on full</span><span>€735</span></li>
+        </ul>
+        <p class="commission-desc">For partners who share a link or make a casual mention. No expectation of active selling.</p>
+      </div>
+      <div class="commission-card active">
+        <div class="commission-tier">// Tier 2 — Active Referral</div>
+        <div class="commission-rate">15%</div>
+        <div class="commission-label">Qualified introduction or active pitch</div>
+        <ul class="commission-examples">
+          <li><span>Monthly plan (per month × 3)</span><span>€36.75/mo</span></li>
+          <li><span>Full programme (one-off)</span><span>€367.50</span></li>
+          <li><span>3 students on monthly</span><span>€330.75</span></li>
+          <li><span>3 students on full</span><span>€1,102.50</span></li>
+        </ul>
+        <p class="commission-desc">For partners who actively qualify, brief, and introduce clients — ensuring they arrive informed and motivated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT TERMS -->
+<section style="padding-top:0;">
+  <div class="section-inner">
+    <div class="sys-tag">Payment Terms</div>
+    <h2>Clear and simple</h2>
+    <p class="section-sub">No surprises. Here's exactly how and when you get paid.</p>
+    <div class="terms-grid">
+      <div class="term-card">
+        <div class="term-icon">📅</div>
+        <h4>Monthly payouts</h4>
+        <p>Commission paid on the 1st of each month for all qualifying referrals in the previous month.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-icon">⏱</div>
+        <h4>3-month window</h4>
+        <p>Monthly plan commission paid for the first 3 months of each referred student's subscription.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-icon">💸</div>
+        <h4>Payment method</h4>
+        <p>Bank transfer or PayPal. A monthly statement will be sent showing all active referrals and amounts due.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-icon">📊</div>
+        <h4>Minimum threshold</h4>
+        <p>Payments made when commission reaches €50. Smaller amounts roll over to the following month.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-icon">🔍</div>
+        <h4>Full transparency</h4>
+        <p>You'll know exactly which referrals have converted and what you're owed. No black boxes.</p>
+      </div>
+      <div class="term-card">
+        <div class="term-icon">🤝</div>
+        <h4>No minimum commitment</h4>
+        <p>Refer when it makes sense for your clients. No targets, no pressure, no lock-in period.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOUR CLIENTS GET -->
+<section style="background:var(--bg2);border-top:1px solid var(--cyan-border);border-bottom:1px solid var(--cyan-border);">
+  <div class="section-inner">
+    <div class="sys-tag">The Programme</div>
+    <h2>What your clients receive</h2>
+    <p class="section-sub">When you refer a client, they're getting one of the most structured and technology-supported advanced English programmes available anywhere.</p>
+    <ul class="student-features">
+      <li>8 intensive 25-minute 1:1 sessions per month</li>
+      <li>Cambridge CELTA certified coach with 15+ years' experience</li>
+      <li>Proprietary 3 Rs cognitive framework (Rumination, Re-exposure, Repetition)</li>
+      <li>Exclusive access to the Fluency Development Web App</li>
+      <li>Spaced repetition home tasks at +24h, +48h, +72h, +96h, +7d, +14d, +28d</li>
+      <li>Fully personalised to industry, role and professional context</li>
+      <li>Performance-based methodology — not textbook-based</li>
+      <li>Focus on retrieval speed, lexical precision and executive communication</li>
+    </ul>
+    <div style="margin-top:28px;">
+      <a href="index.html" class="btn btn-outline">View Full Programme →</a>
+    </div>
+  </div>
+</section>
+
+<!-- APPLY FORM -->
+<section id="apply">
+  <div class="section-inner" style="max-width:680px;">
+    <div class="sys-tag">Apply</div>
+    <h2>Become a partner</h2>
+    <p class="section-sub">Tell me a little about yourself and your client base. I'll be in touch within 48 hours to discuss how we can work together.</p>
+
+    <div class="form-shell">
+      <div class="form-header">
+        <div class="form-header-title">// PARTNER APPLICATION</div>
+      </div>
+      <div class="form-body" id="form-body">
+        <div class="form-row">
+          <div class="field"><label>Your Name</label><input type="text" id="p-name" placeholder="Full name" /></div>
+          <div class="field"><label>Email Address</label><input type="email" id="p-email" placeholder="you@company.com" /></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Your Role / Title</label><input type="text" id="p-role" placeholder="e.g. Executive Coach, L&D Manager" /></div>
+          <div class="field"><label>Company / Organisation</label><input type="text" id="p-company" placeholder="e.g. Acme Consulting" /></div>
+        </div>
+        <div class="field">
+          <label>Which best describes you?</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="partner-type" value="coach"><span>Executive or career coach</span></label>
+            <label class="radio-opt"><input type="radio" name="partner-type" value="mba"><span>MBA or admissions consultant</span></label>
+            <label class="radio-opt"><input type="radio" name="partner-type" value="ld"><span>L&D or HR manager</span></label>
+            <label class="radio-opt"><input type="radio" name="partner-type" value="relocation"><span>Relocation consultant</span></label>
+            <label class="radio-opt"><input type="radio" name="partner-type" value="school"><span>Language school or tutoring platform</span></label>
+            <label class="radio-opt"><input type="radio" name="partner-type" value="other"><span>Other</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label>Tell me about your clients</label>
+          <textarea id="p-clients" placeholder="e.g. I work with senior managers at multinational tech companies, typically non-native English speakers at C1 level preparing for leadership roles..."></textarea>
+        </div>
+        <div class="field">
+          <label>How many referrals might you send per year?</label>
+          <select id="p-volume">
+            <option value="">Select an estimate...</option>
+            <option>1–2 per year</option>
+            <option>3–5 per year</option>
+            <option>6–10 per year</option>
+            <option>10+ per year</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Anything else you'd like to add?</label>
+          <textarea id="p-notes" placeholder="Questions, specific client needs, ideas for collaboration..."></textarea>
+        </div>
+        <div class="form-submit">
+          <button class="btn-submit" id="submit-btn" onclick="submitPartnerForm()">Submit Application →</button>
+        </div>
+      </div>
+      <div class="success-msg" id="success-msg">
+        <div class="success-icon">✦</div>
+        <h3>Application received.</h3>
+        <p>Thank you — I'll review your application and be in touch within 48 hours to discuss how we can work together.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="padding-top:0;">
+  <div class="section-inner" style="max-width:680px;">
+    <div class="sys-tag">FAQ</div>
+    <h2>Common questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>How do you track which students I've referred?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">Each partner receives a unique referral link. When a student books through that link, the referral is logged automatically. For direct introductions, we agree attribution at the time of introduction via email — no ambiguity.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>What if a student I refer doesn't enrol immediately?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">Referral attribution is held for 90 days. If a student you referred books a discovery call and then enrols within 90 days, your commission is triggered regardless of timing.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>Can I refer corporate clients for group training?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">Yes — if you have a corporate client interested in training for a team, get in touch directly and we'll discuss a bespoke arrangement. Commission still applies and is negotiated on a case by case basis.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>Do I need to do any selling on your behalf?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">Not unless you want to. Tier 1 is purely passive — share a link and you're done. Tier 2 is for partners who want to actively introduce and brief clients, which earns the higher rate. The choice is entirely yours.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>What material can you provide me to share with clients?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">Once you're onboarded as a partner, I'll send you a one-page PDF overview of the programme that you can share with clients, as well as a partner information pack with everything you need to refer confidently.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>Is there a minimum number of referrals required?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">No minimum whatsoever. Refer when it genuinely makes sense for your clients. This partnership works best when it's natural — not transactional.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  © 2026 Andrew Pritchard · Advanced Professional English · Cambridge CELTA ·
+  <a href="index.html">Main Site</a> ·
+  <a href="pricing.html">Pricing</a> ·
+  <a href="mailto:fluencyandrew@gmail.com">fluencyandrew@gmail.com</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  function toggleFaq(el) {
+    el.parentElement.classList.toggle('open');
+  }
+
+  function submitPartnerForm() {
+    const btn = document.getElementById('submit-btn');
+    const name = document.getElementById('p-name').value.trim();
+    const email = document.getElementById('p-email').value.trim();
+    if (!name || !email) { alert('Please enter your name and email.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    const partnerType = document.querySelector('input[name="partner-type"]:checked');
+
+    emailjs.init('tDDs6dzGojvVdtOUB');
+    emailjs.send('service_pdf29az', 'template_1xv6skz', {
+      to_name: 'Andrew',
+      to_email: 'fluencyandrew@gmail.com',
+      student_name: name,
+      student_email: email,
+      student_role: document.getElementById('p-role').value,
+      student_industry: document.getElementById('p-company').value,
+      student_level: partnerType ? partnerType.value : 'not specified',
+      student_challenges: document.getElementById('p-clients').value,
+      student_style: document.getElementById('p-volume').value,
+      student_notes: document.getElementById('p-notes').value
+    }).finally(() => {
+      document.getElementById('form-body').style.display = 'none';
+      document.getElementById('success-msg').classList.add('show');
+    });
+  }
+</script>
+</body>
+</html>
