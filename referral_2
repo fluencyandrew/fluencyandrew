@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partner Programme | Andrew Pritchard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  --bg: #071126;
+  --bg2: #0a1628;
+  --cyan: #00e5ff;
+  --cyan-dim: rgba(0,229,255,0.12);
+  --cyan-border: rgba(0,229,255,0.22);
+  --green: #00ff88;
+  --green-dim: rgba(0,255,136,0.08);
+  --green-border: rgba(0,255,136,0.22);
+  --purple: #7b61ff;
+  --white: #f0f4ff;
+  --mid: rgba(240,244,255,0.75);
+  --dim: rgba(240,244,255,0.4);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--white); line-height:1.7; overflow-x:hidden; }
+body::before { content:''; position:fixed; inset:0; z-index:0; pointer-events:none; background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,229,255,0.01) 2px,rgba(0,229,255,0.01) 4px); }
+.grid-bg { position:fixed; inset:0; z-index:0; pointer-events:none; background-image:linear-gradient(rgba(0,229,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.03) 1px,transparent 1px); background-size:60px 60px; }
+.glow { position:fixed; top:-100px; right:-100px; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle,rgba(0,229,255,0.05) 0%,transparent 70%); pointer-events:none; z-index:0; }
+
+nav {
+  position:fixed; top:0; width:100%; z-index:100;
+  background:rgba(6,14,31,0.95); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--cyan-border);
+  padding:0 48px; height:64px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.nav-logo { font-family:'Space Mono',monospace; color:var(--cyan); font-size:0.85rem; letter-spacing:0.1em; text-decoration:none; }
+.nav-logo span { color:var(--dim); }
+.nav-back { font-family:'Space Mono',monospace; font-size:0.72rem; color:var(--dim); letter-spacing:0.08em; text-decoration:none; text-transform:uppercase; transition:color 0.2s; }
+.nav-back:hover { color:var(--cyan); }
+
+/* PAGE */
+.page { max-width:720px; margin:0 auto; padding:120px 48px 80px; position:relative; z-index:1; }
+
+.page-tag {
+  font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.18em;
+  color:var(--cyan); text-transform:uppercase; margin-bottom:20px;
+  display:flex; align-items:center; gap:8px;
+}
+.page-tag::before { content:'//'; color:var(--purple); }
+
+h1 { font-size:clamp(2rem,4vw,3rem); font-weight:800; letter-spacing:-0.03em; line-height:1.15; margin-bottom:20px; }
+h1 .accent { color:var(--cyan); }
+
+.lead { font-size:1rem; color:var(--mid); margin-bottom:56px; font-weight:300; line-height:1.85; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:48px; }
+
+/* SECTIONS */
+.section { margin-bottom:52px; }
+.section h2 { font-size:1.1rem; font-weight:700; margin-bottom:14px; letter-spacing:-0.01em; }
+.section p { font-size:0.92rem; color:var(--mid); font-weight:300; line-height:1.8; margin-bottom:12px; }
+.section p:last-child { margin-bottom:0; }
+.section-divider { height:1px; background:rgba(255,255,255,0.06); margin:52px 0; }
+
+/* COMMISSION BLOCK */
+.commission-block {
+  background:var(--green-dim); border:1px solid var(--green-border);
+  border-radius:10px; padding:28px 28px; margin:20px 0;
+}
+.commission-rate {
+  font-family:'Space Mono',monospace; font-size:2.6rem;
+  font-weight:700; color:var(--green); line-height:1; margin-bottom:6px;
+}
+.commission-sub { font-size:0.82rem; color:rgba(0,255,136,0.6); margin-bottom:20px; font-family:'Space Mono',monospace; letter-spacing:0.04em; }
+.commission-examples { list-style:none; }
+.commission-examples li {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:9px 0; border-bottom:1px solid rgba(0,255,136,0.08);
+  font-size:0.85rem; color:var(--mid);
+}
+.commission-examples li:last-child { border-bottom:none; }
+.commission-examples li span:last-child { font-family:'Space Mono',monospace; color:var(--white); font-weight:600; }
+
+/* HOW TO REFER */
+.refer-options { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+.refer-card {
+  background:rgba(0,0,0,0.3); border:1px solid var(--cyan-border);
+  border-radius:10px; padding:22px 20px;
+}
+.refer-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:6px; color:var(--white); }
+.refer-card p { font-size:0.8rem; color:var(--mid); font-weight:300; margin:0; }
+
+/* WHO -->
+.who-list { list-style:none; margin-top:14px; }
+.who-list li {
+  padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05);
+  font-size:0.88rem; color:var(--mid); display:flex; gap:10px; align-items:flex-start;
+}
+.who-list li:last-child { border-bottom:none; }
+.who-list li::before { content:'→'; color:var(--cyan); font-family:'Space Mono',monospace; flex-shrink:0; }
+
+/* FORM */
+.form-shell { background:rgba(0,0,0,0.35); border:1px solid var(--cyan-border); border-radius:10px; overflow:hidden; margin-top:16px; }
+.form-header { background:rgba(0,229,255,0.04); border-bottom:1px solid var(--cyan-border); padding:16px 24px; }
+.form-header-title { font-family:'Space Mono',monospace; font-size:0.68rem; color:var(--cyan); letter-spacing:0.1em; }
+.form-body { padding:28px 24px; }
+.field { margin-bottom:16px; }
+.field label { display:block; font-size:0.68rem; color:var(--dim); letter-spacing:0.08em; text-transform:uppercase; font-family:'Space Mono',monospace; margin-bottom:7px; }
+.field input, .field textarea {
+  width:100%; background:rgba(0,229,255,0.04); border:1px solid var(--cyan-border);
+  border-radius:6px; color:var(--white); font-family:'Inter',sans-serif;
+  font-size:0.9rem; padding:11px 14px; outline:none; transition:border-color 0.2s;
+}
+.field input:focus, .field textarea:focus { border-color:var(--cyan); background:rgba(0,229,255,0.07); }
+.field textarea { resize:vertical; min-height:80px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.btn-submit { background:var(--cyan); color:var(--bg); border:none; font-weight:700; font-size:0.86rem; padding:13px 28px; border-radius:8px; cursor:pointer; font-family:'Inter',sans-serif; transition:all 0.2s; margin-top:8px; }
+.btn-submit:hover { background:rgba(0,229,255,0.85); box-shadow:0 8px 24px rgba(0,229,255,0.2); }
+.btn-submit:disabled { opacity:0.6; cursor:not-allowed; }
+
+.success-msg { display:none; text-align:center; padding:40px 24px; }
+.success-msg.show { display:block; }
+.success-icon { font-size:2rem; margin-bottom:12px; }
+.success-msg h3 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+.success-msg p { color:var(--mid); font-size:0.86rem; }
+
+/* FAQ */
+.faq-list { margin-top:14px; }
+.faq-item { border-bottom:1px solid rgba(255,255,255,0.06); }
+.faq-q { display:flex; justify-content:space-between; align-items:center; padding:16px 0; cursor:pointer; font-size:0.9rem; font-weight:600; transition:color 0.2s; gap:16px; }
+.faq-q:hover { color:var(--cyan); }
+.faq-toggle { font-family:'Space Mono',monospace; color:var(--cyan); font-size:1.1rem; flex-shrink:0; transition:transform 0.2s; }
+.faq-a { display:none; padding-bottom:16px; font-size:0.84rem; color:var(--mid); font-weight:300; line-height:1.7; }
+.faq-item.open .faq-a { display:block; }
+.faq-item.open .faq-toggle { transform:rotate(45deg); }
+
+footer { border-top:1px solid rgba(255,255,255,0.06); text-align:center; padding:28px 48px; font-family:'Space Mono',monospace; font-size:0.62rem; color:var(--dim); position:relative; z-index:1; margin-top:48px; }
+footer a { color:var(--cyan); text-decoration:none; }
+
+@media(max-width:700px){
+  nav { padding:0 20px; }
+  .page { padding:100px 20px 60px; }
+  .refer-options, .form-row { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+<div class="glow"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">ANDREW<span> // PROFESSIONAL ENGLISH</span></a>
+  <a href="index.html" class="nav-back">← Main Site</a>
+</nav>
+
+<div class="page">
+
+  <div class="page-tag">Partner & Referral Programme</div>
+  <h1>Working together<br>to help <span class="accent">the right students.</span></h1>
+  <p class="lead">I have a limited number of teaching hours available each week, so I'm selective about who I work with — and selective about who I partner with too. If you regularly work with professionals who need to close the gap between functional and authoritative English, this page explains how a referral arrangement could work between us.</p>
+
+  <!-- WHO -->
+  <div class="section">
+    <h2>Who I work best with</h2>
+    <p>The professionals I help most are already fluent — B2 to C1+ — and working in multinational environments. They don't need grammar. They need precision, speed, and the ability to perform under pressure.</p>
+    <p>Partners who tend to refer the best-fit clients include:</p>
+    <ul class="who-list">
+      <li>Executive and career coaches working with senior professionals</li>
+      <li>MBA and business school admissions consultants</li>
+      <li>Relocation consultants helping expat professionals settle into new roles</li>
+      <li>L&D and HR managers at multinationals with international talent</li>
+      <li>Outplacement consultants supporting professionals in transition</li>
+      <li>Language schools with overflow or advanced students they can't serve</li>
+    </ul>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- COMMISSION -->
+  <div class="section">
+    <h2>How the commission works</h2>
+    <p>It's a flat 12.5% on all revenue generated from a referred client — starting from their first payment, which is the €24.50 discovery call deposit, and continuing for as long as they remain a student.</p>
+    <p>Once a client is referred, they're attributed to you permanently. There's no time limit, no minimum, and no ceiling.</p>
+
+    <div class="commission-block">
+      <div class="commission-rate">12.5%</div>
+      <div class="commission-sub">flat rate · all revenue · from day one</div>
+      <ul class="commission-examples">
+        <li><span>Discovery call deposit</span><span>€3.06</span></li>
+        <li><span>Monthly programme (per month)</span><span>€30.63 / mo</span></li>
+        <li><span>Full programme (one-off)</span><span>€306.25</span></li>
+        <li><span>Monthly student over 6 months</span><span>€183.75</span></li>
+        <li><span>Monthly student over 12 months</span><span>€367.50</span></li>
+      </ul>
+    </div>
+
+    <p>You can choose to be paid weekly or monthly — whichever works best for you. Payment is by bank transfer or PayPal, and I'll send a simple statement each time so everything is transparent.</p>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- HOW TO REFER -->
+  <div class="section">
+    <h2>How to refer a client</h2>
+    <p>I want to keep this simple and personal rather than automated. There are two ways to refer someone:</p>
+    <div class="refer-options">
+      <div class="refer-card">
+        <h4>🔗 Unique referral link</h4>
+        <p>Once we've agreed to work together, I'll give you a unique link to share. Any student who books through it is attributed to you automatically.</p>
+      </div>
+      <div class="refer-card">
+        <h4>✉️ Direct introduction</h4>
+        <p>Simply email me the client's name, email address or phone number. I'll confirm receipt and they'll be attributed to you from that point forward.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- FAQ -->
+  <div class="section">
+    <h2>A few common questions</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>Is there a minimum number of referrals expected?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">No. Refer when it genuinely makes sense for your clients. I'd rather receive one well-matched referral than several who aren't a good fit. This isn't a volume arrangement — it's a relationship.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>What if a referred client doesn't sign up immediately?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">Attribution is held for 90 days. If your referral books a discovery call and enrols within 90 days, the commission is yours regardless of timing.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>Do I need to pitch or sell on your behalf?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">Not at all. A warm introduction or a shared link is all that's needed. I'll take it from there via the discovery call.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>What if I have a corporate client interested in group training?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">Get in touch directly and we can discuss it. I handle these on a case by case basis, and commission still applies.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)"><span>Can I see the programme details to share with clients?</span><span class="faq-toggle">+</span></div>
+        <div class="faq-a">Yes — once we've connected I'll send you a one-page programme overview you can share, along with any other information that would be helpful for your clients.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- FORM -->
+  <div class="section" id="apply">
+    <h2>Get in touch</h2>
+    <p>If this sounds like it could work for your clients, fill in the short form below or email me directly at <a href="mailto:fluencyandrew@gmail.com" style="color:var(--cyan);">fluencyandrew@gmail.com</a>. I'll get back to you within a couple of days.</p>
+
+    <div class="form-shell">
+      <div class="form-header">
+        <div class="form-header-title">// PARTNER ENQUIRY</div>
+      </div>
+      <div class="form-body" id="form-body">
+        <div class="form-row">
+          <div class="field"><label>Your Name</label><input type="text" id="p-name" placeholder="Full name" /></div>
+          <div class="field"><label>Email Address</label><input type="email" id="p-email" placeholder="you@company.com" /></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Your Role</label><input type="text" id="p-role" placeholder="e.g. Executive Coach, L&D Manager" /></div>
+          <div class="field"><label>Organisation</label><input type="text" id="p-company" placeholder="Company or practice name" /></div>
+        </div>
+        <div class="field">
+          <label>Tell me about your clients and how you think we could work together</label>
+          <textarea id="p-notes" placeholder="e.g. I work with senior managers at tech companies — mostly non-native speakers at C1 level who need help with executive communication..."></textarea>
+        </div>
+        <button class="btn-submit" id="submit-btn" onclick="submitForm()">Send Enquiry →</button>
+      </div>
+      <div class="success-msg" id="success-msg">
+        <div class="success-icon">✦</div>
+        <h3>Message received.</h3>
+        <p>Thanks for getting in touch — I'll be back to you within a couple of days.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Andrew Pritchard · Advanced Professional English ·
+  <a href="index.html">Main Site</a> ·
+  <a href="pricing.html">Pricing</a> ·
+  <a href="mailto:fluencyandrew@gmail.com">fluencyandrew@gmail.com</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  function toggleFaq(el) {
+    el.parentElement.classList.toggle('open');
+  }
+
+  function submitForm() {
+    const btn = document.getElementById('submit-btn');
+    const name = document.getElementById('p-name').value.trim();
+    const email = document.getElementById('p-email').value.trim();
+    if (!name || !email) { alert('Please enter your name and email.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    emailjs.init('tDDs6dzGojvVdtOUB');
+    emailjs.send('service_pdf29az', 'template_1xv6skz', {
+      to_name: 'Andrew',
+      to_email: 'fluencyandrew@gmail.com',
+      student_name: name,
+      student_email: email,
+      student_role: document.getElementById('p-role').value,
+      student_industry: document.getElementById('p-company').value,
+      student_notes: document.getElementById('p-notes').value
+    }).finally(() => {
+      document.getElementById('form-body').style.display = 'none';
+      document.getElementById('success-msg').classList.add('show');
+    });
+  }
+</script>
+</body>
+</html>
