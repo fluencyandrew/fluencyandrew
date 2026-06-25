@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FluencyFrames — Exercise Screen v3</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:#040d1e;}
+body{display:flex;justify-content:center;align-items:flex-start;font-family:'Space Grotesk',sans-serif;color:#f0f4ff;}
+
+.phone{width:100%;max-width:390px;min-height:100vh;background:#071126;display:flex;flex-direction:column;position:relative;overflow:hidden;}
+.phone::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.025) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:10;background:rgba(7,17,38,0.97);border-bottom:1px solid rgba(0,229,255,0.15);padding:10px 16px 8px;}
+.hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.logo{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.15em;color:#00e5ff;text-transform:uppercase;}
+.streak{font-family:'Space Mono',monospace;font-size:9px;color:#f0b429;background:rgba(240,180,41,0.1);border:1px solid rgba(240,180,41,0.25);border-radius:20px;padding:2px 8px;}
+.prog-row{display:flex;align-items:center;gap:8px;}
+.prog-bar{flex:1;height:3px;background:rgba(0,229,255,0.12);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;width:56%;background:#00e5ff;border-radius:2px;transition:width 0.4s ease;}
+.prog-lbl{font-family:'Space Mono',monospace;font-size:9px;color:rgba(240,244,255,0.4);white-space:nowrap;}
+
+.body{flex:1;overflow-y:auto;position:relative;z-index:1;padding-bottom:4px;}
+
+.arc-strip{background:rgba(123,97,255,0.08);border-bottom:1px solid rgba(123,97,255,0.2);padding:6px 16px;display:flex;justify-content:space-between;align-items:center;}
+.arc-lbl{font-family:'Space Mono',monospace;font-size:8px;color:#7b61ff;letter-spacing:0.12em;text-transform:uppercase;}
+.arc-day{font-family:'Space Mono',monospace;font-size:8px;color:rgba(240,244,255,0.3);}
+
+.interlocutor{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(0,229,255,0.08);}
+.av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;flex-shrink:0;}
+.av-marta{background:rgba(123,97,255,0.15);color:#7b61ff;border:1px solid rgba(123,97,255,0.3);}
+.il-info{flex:1;min-width:0;}
+.il-name{font-size:12px;font-weight:600;color:#f0f4ff;}
+.il-role{font-family:'Space Mono',monospace;font-size:8px;color:rgba(240,244,255,0.4);letter-spacing:0.06em;margin-top:1px;}
+.audio-btn{width:28px;height:28px;border-radius:50%;border:1px solid rgba(0,229,255,0.25);background:rgba(0,229,255,0.06);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.audio-btn i{font-size:13px;color:#00e5ff;}
+
+.thread{padding:10px 16px 0;border-bottom:1px solid rgba(0,229,255,0.08);}
+.thread-lbl{font-family:'Space Mono',monospace;font-size:7px;color:rgba(240,244,255,0.25);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:8px;}
+.bubble{margin-bottom:8px;max-width:78%;}
+.bubble.them{margin-right:auto;}
+.bsender{font-family:'Space Mono',monospace;font-size:7px;color:rgba(240,244,255,0.3);letter-spacing:0.08em;margin-bottom:3px;text-transform:uppercase;}
+.btext{font-size:12px;line-height:1.55;color:rgba(240,244,255,0.82);border:1px solid rgba(123,97,255,0.2);background:rgba(123,97,255,0.06);border-radius:4px 10px 10px 10px;padding:7px 10px;font-weight:300;}
+.hi{color:rgba(0,229,255,0.6);border-bottom:1px dashed rgba(0,229,255,0.3);}
+
+/* EXERCISE AREA */
+.exercise-area{padding:10px 16px 0;}
+
+.goal{margin-bottom:8px;padding:8px 12px;background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.12);border-left:2px solid #00e5ff;border-radius:0 6px 6px 0;}
+.goal-lbl{font-family:'Space Mono',monospace;font-size:7px;color:#00e5ff;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;}
+.goal-txt{font-size:11px;color:rgba(240,244,255,0.7);font-weight:300;line-height:1.5;}
+
+.mode-row{display:flex;gap:5px;margin-bottom:8px;}
+.mpill{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:0.08em;padding:3px 8px;border-radius:20px;border:1px solid;cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
+.mpill.on{background:rgba(0,229,255,0.12);border-color:#00e5ff;color:#00e5ff;}
+.mpill.off{background:transparent;border-color:rgba(255,255,255,0.1);color:rgba(240,244,255,0.3);}
+
+.sentence{font-size:14px;line-height:1.75;color:rgba(240,244,255,0.88);font-weight:400;margin-bottom:10px;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px 12px;}
+.blank{display:inline-block;min-width:80px;border-bottom:2px solid #00e5ff;font-weight:600;text-align:center;padding:0 3px;transition:all 0.25s;}
+.blank.empty{color:transparent;background:rgba(0,229,255,0.08);border-radius:4px;animation:pulse 2s ease-in-out infinite;}
+.blank.preview{color:#7b61ff;border-color:#7b61ff;background:rgba(123,97,255,0.1);border-radius:4px;animation:none;}
+.blank.filled{color:#00e5ff;border-color:rgba(0,229,255,0.4);background:transparent;border-radius:0;animation:none;}
+@keyframes pulse{0%,100%{border-color:rgba(0,229,255,0.3);}50%{border-color:#00e5ff;}}
+
+/* HORIZONTAL PILL OPTIONS */
+.options{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+
+/* Each option is a pill with a conic-gradient border showing exposure progress */
+.opt-wrap{position:relative;cursor:pointer;border-radius:20px;transition:transform 0.15s;}
+.opt-wrap:hover:not(.locked){transform:scale(1.04);}
+.opt-wrap.locked{cursor:default;}
+
+.opt-ring{
+  border-radius:20px;
+  padding:2px; /* ring thickness */
+  background:rgba(255,255,255,0.08);
+  transition:background 0.2s, transform 0.2s;
+}
+.opt-ring.preview{background:conic-gradient(#7b61ff calc(var(--pct)*1%), rgba(123,97,255,0.2) 0);}
+.opt-ring.ok{background:conic-gradient(#00e5ff calc(var(--pct)*1%), rgba(0,229,255,0.2) 0);}
+.opt-ring.wrong{background:conic-gradient(rgba(255,80,80,0.6) calc(var(--pct)*1%), rgba(255,80,80,0.15) 0);}
+
+.opt-inner{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.04em;
+  padding:5px 12px;
+  border-radius:18px;
+  background:#071126;
+  color:rgba(240,244,255,0.55);
+  transition:color 0.2s, background 0.2s;
+  white-space:nowrap;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.opt-wrap:hover:not(.locked) .opt-inner{color:rgba(240,244,255,0.88);background:rgba(123,97,255,0.08);}
+.opt-ring.preview .opt-inner{color:#c4b8ff;background:rgba(123,97,255,0.1);}
+.opt-ring.ok .opt-inner{color:#00e5ff;background:rgba(0,229,255,0.08);}
+.opt-ring.wrong .opt-inner{color:rgba(255,120,120,0.8);background:rgba(255,80,80,0.07);}
+
+.opt-exp{font-size:8px;color:rgba(240,244,255,0.25);font-family:'Space Mono',monospace;}
+.opt-ring.preview .opt-exp{color:rgba(123,97,255,0.7);}
+.opt-ring.ok .opt-exp{color:rgba(0,229,255,0.6);}
+
+/* USER SEND ROW */
+.send-row{display:flex;align-items:flex-end;justify-content:flex-end;padding:4px 16px 10px;gap:10px;}
+
+.hint-txt{font-family:'Space Mono',monospace;font-size:8px;color:rgba(240,244,255,0.22);letter-spacing:0.05em;text-align:right;flex:1;line-height:1.5;padding-bottom:4px;}
+
+/* Avatar send button with conic-gradient accuracy ring */
+.send-av-wrap{
+  position:relative;
+  flex-shrink:0;
+  width:44px;
+  height:44px;
+  cursor:pointer;
+  transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.send-av-wrap.ready{transform:scale(1.15);}
+.send-av-wrap.locked{pointer-events:none;}
+
+.send-ring{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:conic-gradient(
+    rgba(0,229,255,0.15) calc(var(--acc)*1%),
+    rgba(255,80,80,0.2) calc(var(--acc)*1%) calc((var(--acc) + var(--wrng))*1%),
+    rgba(255,255,255,0.06) calc((var(--acc) + var(--wrng))*1%)
+  );
+  transition:background 0.4s;
+}
+.send-av{
+  position:absolute;
+  inset:3px;
+  border-radius:50%;
+  background:rgba(0,229,255,0.12);
+  border:1px solid rgba(0,229,255,0.25);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  font-weight:700;
+  color:rgba(0,229,255,0.45);
+  transition:all 0.25s;
+}
+.send-av-wrap.ready .send-av{
+  background:rgba(0,229,255,0.2);
+  border-color:#00e5ff;
+  color:#00e5ff;
+  box-shadow:0 0 12px rgba(0,229,255,0.25);
+}
+
+.feedback{margin:0 16px 8px;padding:8px 10px;background:rgba(0,229,255,0.05);border:1px solid rgba(0,229,255,0.15);border-radius:6px;font-size:11px;color:rgba(240,244,255,0.65);line-height:1.55;font-weight:300;display:none;}
+.feedback.show{display:block;}
+.feedback strong{color:#00e5ff;font-weight:600;}
+
+/* LEXICAL */
+.lexical{padding:10px 16px 12px;border-bottom:1px solid rgba(0,229,255,0.08);}
+.lex-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.lex-lbl{font-family:'Space Mono',monospace;font-size:7px;color:rgba(240,244,255,0.25);letter-spacing:0.12em;text-transform:uppercase;}
+.lex-word{font-family:'Space Mono',monospace;font-size:9px;color:rgba(240,244,255,0.25);letter-spacing:0.08em;transition:color 0.2s;}
+.lex-word.on{color:#00e5ff;}
+
+.cluster{position:relative;height:104px;margin-bottom:8px;}
+svg.conn{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+
+.node{position:absolute;font-size:9px;font-family:'Space Mono',monospace;padding:3px 7px;border-radius:20px;border:1px solid;white-space:nowrap;cursor:default;transition:all 0.3s;}
+.node.center{background:rgba(0,229,255,0.12);border-color:#00e5ff;color:#00e5ff;font-weight:700;font-size:10px;top:50%;left:50%;transform:translate(-50%,-50%);}
+.node.center.purple{background:rgba(123,97,255,0.15);border-color:#7b61ff;color:#c4b8ff;}
+/* learned = user has seen this word */
+.node.learned{background:rgba(0,229,255,0.05);border-color:rgba(0,229,255,0.22);color:rgba(0,229,255,0.5);}
+/* unseen = exists in program but not encountered yet */
+.node.unseen{background:transparent;border-color:rgba(255,255,255,0.07);color:rgba(240,244,255,0.18);border-style:dashed;}
+/* active = highlighted because currently selected */
+.node.active{border-color:rgba(123,97,255,0.45);color:rgba(200,190,255,0.8);background:rgba(123,97,255,0.1);}
+
+.trk{display:flex;align-items:center;gap:8px;}
+.trk-bar{flex:1;height:3px;background:rgba(0,229,255,0.1);border-radius:2px;overflow:hidden;}
+.trk-fill{height:100%;width:0%;background:linear-gradient(90deg,#7b61ff,#00e5ff);border-radius:2px;transition:width 0.4s ease;}
+.trk-lbl{font-family:'Space Mono',monospace;font-size:8px;color:rgba(240,244,255,0.3);white-space:nowrap;}
+
+.collocates{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;min-height:18px;}
+.ctag{font-family:'Space Mono',monospace;font-size:8px;color:rgba(123,97,255,0.6);background:rgba(123,97,255,0.06);border:1px solid rgba(123,97,255,0.15);border-radius:20px;padding:2px 7px;transition:all 0.2s;}
+.ctag.lit{color:rgba(0,229,255,0.8);background:rgba(0,229,255,0.07);border-color:rgba(0,229,255,0.2);}
+
+/* NEXT BTN */
+.next-row{padding:8px 16px 16px;display:flex;justify-content:flex-end;}
+.next-btn{background:#00e5ff;color:#071126;border:none;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.06em;padding:8px 18px;border-radius:6px;cursor:pointer;text-transform:uppercase;opacity:0.25;pointer-events:none;transition:all 0.2s;}
+.next-btn.ready{opacity:1;pointer-events:all;}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="hdr">
+    <div class="hdr-top">
+      <div class="logo">// Fluency Engine · Day 42</div>
+      <div class="streak">🔥 17 day streak</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+      <div class="prog-lbl" id="progLbl">14 / 25</div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <div class="arc-strip">
+      <div class="arc-lbl">// Client escalation arc</div>
+      <div class="arc-day">Day 3 of 7</div>
+    </div>
+
+    <div class="interlocutor">
+      <div class="av av-marta">MS</div>
+      <div class="il-info">
+        <div class="il-name">Marta Sánchez</div>
+        <div class="il-role">Senior Account Manager · Berlin Office</div>
+      </div>
+      <div class="audio-btn"><i class="ti ti-player-play" aria-hidden="true"></i></div>
+    </div>
+
+    <div class="thread">
+      <div class="thread-lbl">// Thread</div>
+      <div class="bubble them">
+        <div class="bsender">Marta</div>
+        <div class="btext">The client has raised the <span class="hi">delay</span> again. They're becoming increasingly <span class="hi">frustrated</span> and need a formal response today.</div>
+      </div>
+      <div class="bubble them">
+        <div class="bsender">Marta</div>
+        <div class="btext">Can you draft something that <span class="hi">acknowledges</span> the issue and reassures them?</div>
+      </div>
+    </div>
+
+    <div class="exercise-area">
+
+      <div class="goal">
+        <div class="goal-lbl">// Communicative goal</div>
+        <div class="goal-txt">Sound accountable and professional — own the impact without being defensive.</div>
+      </div>
+
+      <div class="mode-row">
+        <div class="mpill on">R1 Select</div>
+        <div class="mpill off">R2 Type</div>
+        <div class="mpill off">R3 Speak</div>
+      </div>
+
+      <div class="sentence">
+        I apologise for the <span class="blank empty" id="blank">_______</span> this has caused.
+      </div>
+
+      <!-- Horizontal pill options -->
+      <div class="options" id="optArea">
+
+        <div class="opt-wrap" id="ow-issue" onclick="pick('issue')">
+          <div class="opt-ring" id="or-issue" style="--pct:33">
+            <div class="opt-inner">issue <span class="opt-exp">4/12</span></div>
+          </div>
+        </div>
+
+        <div class="opt-wrap" id="ow-inconvenience" onclick="pick('inconvenience')">
+          <div class="opt-ring" id="or-inconvenience" style="--pct:17">
+            <div class="opt-inner">inconvenience <span class="opt-exp">2/12</span></div>
+          </div>
+        </div>
+
+        <div class="opt-wrap" id="ow-disruption" onclick="pick('disruption')">
+          <div class="opt-ring" id="or-disruption" style="--pct:50">
+            <div class="opt-inner">disruption <span class="opt-exp">6/12</span></div>
+          </div>
+        </div>
+
+        <div class="opt-wrap" id="ow-difficulty" onclick="pick('difficulty')">
+          <div class="opt-ring" id="or-difficulty" style="--pct:25">
+            <div class="opt-inner">difficulty <span class="opt-exp">3/12</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Send row: hint left, avatar right -->
+      <div class="send-row">
+        <div class="hint-txt" id="hintTxt">Select a word to explore<br>then tap your avatar to confirm</div>
+        <div class="send-av-wrap" id="sendWrap" onclick="doConfirm()">
+          <div class="send-ring" id="sendRing" style="--acc:72;--wrng:12"></div>
+          <div class="send-av" id="sendAv">AP</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="feedback" id="fb">
+      <strong>disruption</strong> names the concrete impact — the client already knows something went wrong. <em>Any inconvenience / issue / difficulty</em> hedges whether an impact even occurred, signalling distance rather than accountability.
+    </div>
+
+    <!-- LEXICAL CLUSTER -->
+    <div class="lexical">
+      <div class="lex-hdr">
+        <div class="lex-lbl">// Word tracker</div>
+        <div class="lex-word" id="lexWord">— tap an option above</div>
+      </div>
+
+      <div class="cluster" id="cluster">
+        <svg class="conn" id="svg"></svg>
+        <div class="node unseen" style="top:7px;left:10px"           id="nb0">—</div>
+        <div class="node unseen" style="top:7px;right:10px"          id="nb1">—</div>
+        <div class="node unseen" style="top:50%;left:2px;transform:translateY(-50%)" id="nb2">—</div>
+        <div class="node center" id="ncenter">—</div>
+        <div class="node unseen" style="top:50%;right:2px;transform:translateY(-50%)" id="nb3">—</div>
+        <div class="node unseen" style="bottom:7px;left:10px"        id="nb4">—</div>
+        <div class="node unseen" style="bottom:7px;right:10px"       id="nb5">—</div>
+      </div>
+
+      <div class="trk">
+        <div class="trk-bar"><div class="trk-fill" id="trkFill"></div></div>
+        <div class="trk-lbl" id="trkLbl">— / 12 exposures</div>
+      </div>
+
+      <div class="collocates" id="colls"></div>
+    </div>
+
+    <div class="next-row">
+      <button class="next-btn" id="nextBtn" onclick="doNext()">Next exercise →</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+// Each word: exposures, collocates, and neighbours with their learned status
+// learned = seen in programme so far; unseen = in programme but not yet reached
+const CORRECT = 'disruption';
+const OPTS = ['issue','inconvenience','disruption','difficulty'];
+
+const DATA = {
+  issue: {
+    exp: 4,
+    colls: ['core ~','~ at hand','raise an ~','address the ~'],
+    nbs: [
+      {w:'problem',     s:'learned'},
+      {w:'concern',     s:'learned'},
+      {w:'matter',      s:'unseen'},
+      {w:'difficulty',  s:'learned'},
+      {w:'question',    s:'unseen'},
+      {w:'complication',s:'unseen'},
+    ]
+  },
+  inconvenience: {
+    exp: 2,
+    colls: ['minor ~','cause ~','temporary ~','slight ~'],
+    nbs: [
+      {w:'difficulty',  s:'learned'},
+      {w:'disruption',  s:'learned'},
+      {w:'trouble',     s:'unseen'},
+      {w:'bother',      s:'unseen'},
+      {w:'annoyance',   s:'unseen'},
+      {w:'setback',     s:'learned'},
+    ]
+  },
+  disruption: {
+    exp: 6,
+    colls: ['operational ~','service ~','significant ~','supply chain ~'],
+    nbs: [
+      {w:'issue',        s:'learned'},
+      {w:'interruption', s:'learned'},
+      {w:'delay',        s:'learned'},
+      {w:'problem',      s:'learned'},
+      {w:'setback',      s:'learned'},
+      {w:'difficulty',   s:'learned'},
+    ]
+  },
+  difficulty: {
+    exp: 3,
+    colls: ['technical ~','financial ~','considerable ~','~ ahead'],
+    nbs: [
+      {w:'problem',      s:'learned'},
+      {w:'issue',        s:'learned'},
+      {w:'disruption',   s:'learned'},
+      {w:'challenge',    s:'unseen'},
+      {w:'setback',      s:'learned'},
+      {w:'obstacle',     s:'unseen'},
+    ]
+  }
+};
+
+const NB_IDS = ['nb0','nb1','nb2','nb3','nb4','nb5'];
+
+// Rolling accuracy — last 25 answers: 1=correct, 0=wrong
+// Simulate some history
+let history = [1,1,0,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1]; // 18/25 = 72%
+let picked = null;
+let confirmed = false;
+
+function accuracy() {
+  const recent = history.slice(-25);
+  const correct = recent.filter(x=>x===1).length;
+  const wrong = recent.filter(x=>x===0).length;
+  const total = recent.length;
+  return {
+    accPct: total ? Math.round((correct/total)*100) : 0,
+    wrngPct: total ? Math.round((wrong/total)*100) : 0
+  };
+}
+
+function updateSendRing() {
+  const {accPct, wrngPct} = accuracy();
+  const ring = document.getElementById('sendRing');
+  ring.style.setProperty('--acc', accPct);
+  ring.style.setProperty('--wrng', wrngPct);
+}
+
+updateSendRing();
+
+// ─── PICK ───────────────────────────────────────────────────────────────────
+function pick(w) {
+  if (confirmed) return;
+  picked = w;
+
+  OPTS.forEach(o => {
+    const ring = document.getElementById('or-'+o);
+    const wrap = document.getElementById('ow-'+o);
+    ring.className = 'opt-ring' + (o===w ? ' preview' : '');
+    wrap.classList.remove('locked');
+  });
+
+  const blank = document.getElementById('blank');
+  blank.textContent = w;
+  blank.className = 'blank preview';
+
+  document.getElementById('sendWrap').classList.add('ready');
+  document.getElementById('hintTxt').textContent = 'Tap another to compare\nor tap your avatar to confirm';
+
+  renderCluster(w, false);
+}
+
+// ─── CLUSTER ────────────────────────────────────────────────────────────────
+function renderCluster(w, isConfirmed) {
+  const d = DATA[w];
+
+  const lexWord = document.getElementById('lexWord');
+  lexWord.textContent = w;
+  lexWord.className = 'lex-word on';
+
+  const center = document.getElementById('ncenter');
+  center.textContent = w;
+  center.className = 'node center' + (isConfirmed ? '' : ' purple');
+
+  d.nbs.forEach((nb, i) => {
+    const el = document.getElementById('nb'+i);
+    if (!el) return;
+    el.textContent = nb.w;
+    el.style.display = '';
+    // learned + active (currently selected word) gets extra highlight
+    const isActive = (nb.w === picked && !isConfirmed);
+    el.className = 'node ' + (isActive ? 'active' : nb.s);
+  });
+
+  const pct = Math.round((d.exp / 12) * 100);
+  document.getElementById('trkFill').style.width = pct + '%';
+  document.getElementById('trkLbl').textContent = d.exp + ' / 12 exposures';
+
+  const colls = document.getElementById('colls');
+  colls.innerHTML = '';
+  d.colls.forEach(c => {
+    const t = document.createElement('div');
+    t.className = 'ctag' + (isConfirmed ? ' lit' : '');
+    t.textContent = c;
+    colls.appendChild(t);
+  });
+
+  setTimeout(drawLines, 60);
+}
+
+function drawLines() {
+  const svg = document.getElementById('svg');
+  svg.innerHTML = '';
+  const cr = document.getElementById('cluster').getBoundingClientRect();
+  const cc = document.getElementById('ncenter').getBoundingClientRect();
+  const cx = cc.left - cr.left + cc.width/2;
+  const cy = cc.top  - cr.top  + cc.height/2;
+  NB_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || el.style.display === 'none') return;
+    const r = el.getBoundingClientRect();
+    const ex = r.left - cr.left + r.width/2;
+    const ey = r.top  - cr.top  + r.height/2;
+    const isUnseen = el.classList.contains('unseen');
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',cx); ln.setAttribute('y1',cy);
+    ln.setAttribute('x2',ex); ln.setAttribute('y2',ey);
+    ln.setAttribute('stroke', isUnseen ? 'rgba(255,255,255,0.04)' : 'rgba(123,97,255,0.18)');
+    ln.setAttribute('stroke-width','1');
+    if (isUnseen) ln.setAttribute('stroke-dasharray','3 3');
+    svg.appendChild(ln);
+  });
+}
+
+// ─── CONFIRM ────────────────────────────────────────────────────────────────
+function doConfirm() {
+  if (!picked || confirmed) return;
+  confirmed = true;
+
+  const isCorrect = picked === CORRECT;
+  history.push(isCorrect ? 1 : 0);
+  if (history.length > 50) history = history.slice(-50);
+
+  // Lock options
+  OPTS.forEach(o => {
+    const ring = document.getElementById('or-'+o);
+    const wrap = document.getElementById('ow-'+o);
+    wrap.classList.add('locked');
+    if (o === picked && isCorrect)  ring.className = 'opt-ring ok';
+    else if (o === picked)          ring.className = 'opt-ring wrong';
+    else if (o === CORRECT)         ring.className = 'opt-ring ok';
+    else                            ring.className = 'opt-ring';
+  });
+
+  // Blank
+  document.getElementById('blank').textContent = CORRECT;
+  document.getElementById('blank').className = 'blank filled';
+
+  // Hint
+  document.getElementById('hintTxt').textContent = isCorrect ? 'Correct — well done' : 'Not quite — see explanation below';
+
+  // Send avatar dims and locks
+  const sw = document.getElementById('sendWrap');
+  sw.classList.remove('ready');
+  sw.classList.add('locked');
+
+  // Update ring with new accuracy
+  updateSendRing();
+
+  // Show correct word's cluster
+  renderCluster(CORRECT, true);
+
+  document.getElementById('fb').classList.add('show');
+  document.getElementById('nextBtn').classList.add('ready');
+}
+
+// ─── NEXT ───────────────────────────────────────────────────────────────────
+function doNext() {
+  if (!confirmed) return;
+  confirmed = false; picked = null;
+
+  document.getElementById('blank').className = 'blank empty';
+  document.getElementById('blank').textContent = '_______';
+  document.getElementById('fb').classList.remove('show');
+  document.getElementById('nextBtn').classList.remove('ready');
+  document.getElementById('hintTxt').textContent = 'Select a word to explore\nthen tap your avatar to confirm';
+
+  const sw = document.getElementById('sendWrap');
+  sw.classList.remove('ready','locked');
+
+  OPTS.forEach(o => {
+    document.getElementById('or-'+o).className = 'opt-ring';
+    document.getElementById('ow-'+o).classList.remove('locked');
+  });
+
+  document.getElementById('lexWord').textContent = '— tap an option above';
+  document.getElementById('lexWord').className = 'lex-word';
+  document.getElementById('ncenter').textContent = '—';
+  document.getElementById('ncenter').className = 'node center';
+  document.getElementById('trkFill').style.width = '0%';
+  document.getElementById('trkLbl').textContent = '— / 12 exposures';
+  document.getElementById('colls').innerHTML = '';
+  NB_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    el.textContent = '—'; el.className = 'node unseen'; el.style.display = '';
+  });
+  document.getElementById('svg').innerHTML = '';
+
+  const lbl = document.getElementById('progLbl');
+  const cur = parseInt(lbl.textContent);
+  const nxt = Math.min(cur+1,25);
+  document.getElementById('progFill').style.width = Math.round((nxt/25)*100)+'%';
+  lbl.textContent = nxt + ' / 25';
+}
+</script>
+</body>
+</html>
